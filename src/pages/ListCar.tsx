@@ -28,6 +28,7 @@ export default function ListCar() {
 
   const [imageUrl, setImageUrl] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [imageInputMethod, setImageInputMethod] = useState<'url' | 'file'>('url');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -303,26 +304,94 @@ export default function ListCar() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-4">Car Image</label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  disabled={uploadingImage}
-                  className="hidden"
-                  id="image-upload"
-                />
-                <label htmlFor="image-upload" className="cursor-pointer">
-                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-600">
-                    {uploadingImage ? 'Uploading...' : 'Click to upload or drag and drop'}
-                  </p>
-                  <p className="text-sm text-gray-500">PNG, JPG up to 10MB</p>
-                </label>
+
+              <div className="flex gap-4 mb-4">
+                <button
+                  type="button"
+                  onClick={() => setImageInputMethod('url')}
+                  className={`px-4 py-2 rounded-lg font-medium transition ${imageInputMethod === 'url' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                >
+                  Image URL
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setImageInputMethod('file')}
+                  className={`px-4 py-2 rounded-lg font-medium transition ${imageInputMethod === 'file' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                >
+                  Upload File
+                </button>
               </div>
+
+              {imageInputMethod === 'url' ? (
+                <div className="space-y-3">
+                  <input
+                    type="url"
+                    placeholder="Paste image URL (e.g., from Pexels)"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  />
+                  <p className="text-sm text-gray-600">
+                    Tip: Use free images from <a href="https://pexels.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Pexels.com</a>
+                  </p>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-gray-700">Popular car images:</p>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <button
+                        type="button"
+                        onClick={() => setImageUrl('https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=800')}
+                        className="p-2 bg-gray-100 hover:bg-gray-200 rounded text-left"
+                      >
+                        Honda/Toyota
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setImageUrl('https://images.pexels.com/photos/1719647/pexels-photo-1719647.jpeg?auto=compress&cs=tinysrgb&w=800')}
+                        className="p-2 bg-gray-100 hover:bg-gray-200 rounded text-left"
+                      >
+                        Sedan
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setImageUrl('https://images.pexels.com/photos/3972755/pexels-photo-3972755.jpeg?auto=compress&cs=tinysrgb&w=800')}
+                        className="p-2 bg-gray-100 hover:bg-gray-200 rounded text-left"
+                      >
+                        Red Car
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setImageUrl('https://images.pexels.com/photos/164634/pexels-photo-164634.jpeg?auto=compress&cs=tinysrgb&w=800')}
+                        className="p-2 bg-gray-100 hover:bg-gray-200 rounded text-left"
+                      >
+                        SUV
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploadingImage}
+                    className="hidden"
+                    id="image-upload"
+                  />
+                  <label htmlFor="image-upload" className="cursor-pointer">
+                    <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-gray-600">
+                      {uploadingImage ? 'Uploading...' : 'Click to upload or drag and drop'}
+                    </p>
+                    <p className="text-sm text-gray-500">PNG, JPG up to 10MB</p>
+                  </label>
+                </div>
+              )}
+
               {imageUrl && (
                 <div className="mt-4">
-                  <img src={imageUrl} alt="Car preview" className="max-h-48 rounded-lg" />
+                  <p className="text-sm text-gray-600 mb-2">Preview:</p>
+                  <img src={imageUrl} alt="Car preview" className="max-h-48 rounded-lg object-cover" />
                 </div>
               )}
             </div>
